@@ -1,0 +1,120 @@
+<template>
+	<el-row>
+		<el-col :span="8">
+			<el-card class="box-card">
+				<div class="user">
+					<img src="" alt="" />
+					<div class="userinfo">
+						<p class="name">Amdin</p>
+						<p class="access">超级管理员</p>
+					</div>
+				</div>
+				<div class="login-info">
+					<p><span>上次登陆的时间</span><span>2021-7-19</span></p>
+					<p><span>上次登陆的地点</span><span>武汉</span></p>
+				</div>
+			</el-card>
+			<el-card style="margin-top: 20px; height: 460px">
+				<el-table :data="tableData" style="width: 100%">
+					<el-table-column v-for="(val, key) in tableLabel" :key="key" :prop="key" :label="val"> </el-table-column>
+				</el-table>
+			</el-card>
+		</el-col>
+		<el-col :span="16"><div class="grid-content bg-purple-light"></div></el-col>
+	</el-row>
+</template>
+
+<script>
+export default {
+	data() {
+		return {
+			tableData: [
+				{
+					name: '华为',
+					todayBuy: 100,
+					monthBuy: 300,
+					totalBuy: 800,
+				},
+				{
+					name: '苹果',
+					todayBuy: 100,
+					monthBuy: 300,
+					totalBuy: 800,
+				},
+				{
+					name: '小米',
+					todayBuy: 100,
+					monthBuy: 300,
+					totalBuy: 800,
+				},
+				{
+					name: 'oppo',
+					todayBuy: 100,
+					monthBuy: 300,
+					totalBuy: 800,
+				},
+				{
+					name: 'vivo',
+					todayBuy: 100,
+					monthBuy: 300,
+					totalBuy: 800,
+				},
+				{
+					name: 'vivo',
+					todayBuy: 100,
+					monthBuy: 300,
+					totalBuy: 800,
+				},
+				{
+					name: 'vivo',
+					todayBuy: 100,
+					monthBuy: 300,
+					totalBuy: 800,
+				}
+			],
+			tableLabel: {
+				name: '课程',
+				todayBuy: '今日购买',
+				monthBuy: '本月购买',
+				totalBuy: '总购买',
+			},
+		};
+	},
+};
+</script>
+
+<style lang="less" scoped>
+.user {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid;
+	img {
+		margin-right: 40px;
+		width: 150px;
+		height: 150px;
+		border-radius: 50%;
+	}
+	.userinfo {
+		.name {
+			font-size: 32px;
+			margin-bottom: 10px;
+		}
+		.userinfo {
+			color: #999999;
+		}
+	}
+}
+.login-info {
+	p {
+		line-height: 28px;
+		font-size: 14px;
+		color: #999999;
+		span {
+			color: #666666;
+			margin-left: 60px;
+		}
+	}
+}
+</style>
