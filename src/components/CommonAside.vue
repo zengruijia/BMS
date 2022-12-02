@@ -2,7 +2,7 @@
 	<!-- <el-col :span="12"> -->
 	<el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" :collapse="isCollapse">
 		<h3>{{ isCollapse ? '后台' : '通用后台管理系统' }}</h3>
-		<el-menu-item v-for="item in noChildren" :key="item.name" :index="item.name" @click="clickMenu(item.path)">
+		<el-menu-item v-for="item in noChildren" :key="item.name" :index="item.name" @click="clickMenu(item)">
 			<i :class="`el-icon-${item.icon}`"></i>
 			<span slot="title">{{ item.label }}</span>
 		</el-menu-item>
@@ -95,11 +95,12 @@ export default {
 		},
 
 		//菜单点击事件
-		clickMenu(path) {
-			if (this.$route.path !== path && !(this.$route.path === '/home' && path === '/')) {
+		clickMenu(item) {
+			if (this.$route.path !== item.path && !(this.$route.path === '/home' && item.path === '/')) {
 				console.log(this.$route);
-				this.$router.push(path);
+				this.$router.push(item.path);
 			}
+			this.$store.commit('selectMenu', item);
 		},
 	},
 	computed: {

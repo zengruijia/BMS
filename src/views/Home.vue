@@ -1,6 +1,6 @@
 <template>
 	<el-row>
-		<el-col :span="8">
+		<el-col :span="8" style="padding-right: 10px">
 			<el-card class="box-card">
 				<div class="user">
 					<img src="" alt="" />
@@ -20,65 +20,132 @@
 				</el-table>
 			</el-card>
 		</el-col>
-		<el-col :span="16"><div class="grid-content bg-purple-light"></div></el-col>
+		<el-col :span="16" style="padding-left: 10px">
+			<div class="num">
+				<el-card class="el-card" v-for="item in countData" :key="item.name" :body-style="{ display: 'flex', padding: 0 }">
+					<i class="icon" :class="`el-icon-${item.icon}`" :style="{ background: item.color }"></i>
+					<div class="detail">
+						<p class="price">￥{{ item.value }}</p>
+						<p class="txt">{{ item.name }}</p>
+					</div>
+				</el-card>
+			</div>
+			<el-card style="height: 280px">
+				<div ref="echarts1" style="width: 100%; height: 280px"></div>
+			</el-card>
+			<div class="graph">
+				<el-card style="height: 260px; width: 48%">
+					<div ref="echarts2" style="width: 100%; height: 260px"></div>
+				</el-card>
+				<el-card style="height: 260px; width: 48%">
+					<div ref="echarts3" style="width: 100%; height: 240px"></div>
+				</el-card>
+			</div>
+		</el-col>
 	</el-row>
 </template>
 
 <script>
+import { getData } from '../api/index';
+import * as echarts from 'echarts';
 export default {
 	data() {
 		return {
-			tableData: [
-				{
-					name: '华为',
-					todayBuy: 100,
-					monthBuy: 300,
-					totalBuy: 800,
-				},
-				{
-					name: '苹果',
-					todayBuy: 100,
-					monthBuy: 300,
-					totalBuy: 800,
-				},
-				{
-					name: '小米',
-					todayBuy: 100,
-					monthBuy: 300,
-					totalBuy: 800,
-				},
-				{
-					name: 'oppo',
-					todayBuy: 100,
-					monthBuy: 300,
-					totalBuy: 800,
-				},
-				{
-					name: 'vivo',
-					todayBuy: 100,
-					monthBuy: 300,
-					totalBuy: 800,
-				},
-				{
-					name: 'vivo',
-					todayBuy: 100,
-					monthBuy: 300,
-					totalBuy: 800,
-				},
-				{
-					name: 'vivo',
-					todayBuy: 100,
-					monthBuy: 300,
-					totalBuy: 800,
-				}
-			],
-			tableLabel: {
-				name: '课程',
-				todayBuy: '今日购买',
-				monthBuy: '本月购买',
-				totalBuy: '总购买',
-			},
+			tableData: [],
+			tableLabel: {},
+			countData: [],
+			orderData: [],
+			videoData: [],
 		};
+	},
+	mounted() {
+		getData().then(({ data }) => {
+			console.log(data.data);
+			const { tableData, tableLabel, countData, orderData, videoData } = data.data;
+			this.tableData = tableData;
+			this.tableLabel = tableLabel;
+			this.countData = countData;
+			this.videoData = videoData;
+
+			//折线图********************************************************
+			const xAxis = Object.keys(orderData.data[0]);
+			console.log(xAxis);
+			const xAxisData = {
+				data: xAxis,
+			};
+
+			// 指定图表的配置项和数据
+			var echarts1Option = {
+				xAxis: xAxisData,
+				legend: xAxisData,
+				yAxis: {},
+				series: [],
+			};
+
+			xAxis.forEach(key => {
+				echarts1Option.series.push({
+					name: key,
+					data: orderData.data.map(item => item[key]),
+					type: 'line',
+				});
+			});
+
+			// 基于准备好的dom，初始化echarts实例
+			var echarts1 = echarts.init(this.$refs.echarts1);
+
+			console.log(echarts1Option);
+			// 使用刚指定的配置项和数据显示图表。
+			echarts1.setOption(echarts1Option);
+
+			//柱状图*******************************************************
+			var echarts2Option = {
+				xAxis: {
+					type: 'category',
+					data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+				},
+				yAxis: {
+					type: 'value',
+				},
+				series: [
+					{
+						data: [120, 200, 150, 80, 70, 110, 130],
+						type: 'bar',
+					},
+				],
+			};
+
+			// 基于准备好的dom，初始化echarts实例
+			var echarts2 = echarts.init(this.$refs.echarts2);
+
+			// 使用刚指定的配置项和数据显示图表。
+			echarts2.setOption(echarts2Option);
+
+			//饼状图********************************************************
+			var echarts3Option = {
+				// tooltip: {
+				// 	trigger: 'item',
+				// },
+				color: ['#e3e3e3', '#a43435', '#8a6a47', '#e26647', '#344634', '#654633', '#1e6647'],
+				series: [
+					{
+						data: this.videoData,
+            type: 'pie'
+					},
+				],
+			};
+
+			// 基于准备好的dom，初始化echarts实例
+			var echarts3 = echarts.init(this.$refs.echarts3);
+
+			// 使用刚指定的配置项和数据显示图表。
+			echarts3.setOption(echarts3Option);
+
+			window.onresize = function () {
+				echarts1.resize();
+				echarts2.resize();
+				echarts3.resize();
+			};
+		});
 	},
 };
 </script>
@@ -116,5 +183,46 @@ export default {
 			margin-left: 60px;
 		}
 	}
+}
+
+.num {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	.icon {
+		width: 80px;
+		height: 80px;
+		font-size: 30px;
+		text-align: center;
+		line-height: 80px;
+		color: #fff;
+	}
+	.detail {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		margin-left: 15px;
+		.price {
+			font-size: 30px;
+			margin-bottom: 10px;
+			line-height: 30px;
+			height: 30px;
+		}
+		.txt {
+			font-size: 14px;
+			color: #999999;
+			text-align: center;
+		}
+	}
+	.el-card {
+		width: 32%;
+		margin-bottom: 20px;
+	}
+}
+
+.graph {
+	margin-top: 20px;
+	display: flex;
+	justify-content: space-between;
 }
 </style>

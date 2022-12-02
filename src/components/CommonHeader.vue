@@ -3,13 +3,20 @@
 		<div class="l">
 			<el-button icon="el-icon-menu" size="mini" @click="changeMenu"></el-button>
 			<!-- 面包屑 -->
-			<span class="text">首页</span>
+			<span class="text">
+				<el-breadcrumb separator="/">
+					<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+					<el-breadcrumb-item><a href="/">活动管理</a></el-breadcrumb-item>
+					<el-breadcrumb-item>活动列表</el-breadcrumb-item>
+					<el-breadcrumb-item>活动详情</el-breadcrumb-item>
+				</el-breadcrumb>
+			</span>
 		</div>
 		<div class="r">
 			<el-dropdown>
 				<span class="el-dropdown-link">
-          <img class="headerImg" src="" alt="">
-        </span>
+					<img class="headerImg" src="" alt="" />
+				</span>
 				<el-dropdown-menu slot="dropdown">
 					<el-dropdown-item>个人中心</el-dropdown-item>
 					<el-dropdown-item>退出</el-dropdown-item>
@@ -24,11 +31,11 @@ export default {
 	data() {
 		return {};
 	},
-  methods:{
-    changeMenu(){
-      this.$store.commit('collapseMenu')
-    }
-  }
+	methods: {
+		changeMenu() {
+			this.$store.commit('collapseMenu');
+		},
+	},
 };
 </script>
 
@@ -45,10 +52,10 @@ export default {
 		font-size: 14px;
 		margin-left: 14px;
 	}
-  .headerImg{
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
+	.headerImg {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+	}
 }
 </style>
