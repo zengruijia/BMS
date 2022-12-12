@@ -27,6 +27,13 @@ const mutations = {
 			}
 		}
 	},
+
+	//删除
+	closeTag(state, item) {
+		const index = state.tabList.findIndex(val => val.name === item.name);
+    console.log(index);
+		state.tabList.splice(index, 1);
+	},
 };
 const getters = {};
 

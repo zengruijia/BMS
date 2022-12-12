@@ -1,6 +1,4 @@
 import axios from 'axios';
-import Vue from 'vue';
-Vue.use(axios);
 
 const request = axios.create({
 	baseURL: '/api', //统一请求前缀
